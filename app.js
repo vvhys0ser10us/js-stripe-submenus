@@ -47,22 +47,39 @@ linkBtns.forEach((btn) => {
     const center = (tempBtn.left + tempBtn.right) / 2
     const bottom = tempBtn.bottom - 3
     submenu.style.left = `${center}px`
-    submenu.style.bottom = `${bottom}px`
+    submenu.style.top = `${bottom}px`
 
+    // const page = sublinks.find(({page}) => page === text)
     const [{ page, links }] = sublinks.filter((link) => link.page === type)
-    submenu.innerHTML = `<h4>${page}</h4>
-    <div class="submenu-center"> 
-      ${links
-        .map((item) => {
-          const { label, icon, url } = item
-          return `<a href="${url}"><i class="${icon}"></i>${label}</a>`
-        })
-        .join('')}
-    </div>`
-    submenu.classList.toggle('show')
-  })
 
-  btn.addEventListener('mouseout', () => {
-    submenu.classList.toggle('show')
+    let columns = 'col-2'
+    if (links.length === 3) {
+      columns = 'col-3'
+    }
+    if (links.length > 3) {
+      columns = 'col-4'
+    }
+
+    submenu.innerHTML = `
+    <section>
+      <h4>${page}</h4>
+      <div class="submenu-center ${columns}"> 
+        ${links
+          .map((item) => {
+            const { label, icon, url } = item
+            return `<a href="${url}"><i class="${icon}"></i>${label}</a>`
+          })
+          .join('')}
+      </div>
+    </section>`
+    submenu.classList.add('show')
   })
+})
+
+hero.addEventListener('mouseover', () => {
+  submenu.classList.remove('show')
+})
+
+nav.addEventListener('mouseover', (e) => {
+  if (!e.target.classList.contains('link-btn')) submenu.classList.remove('show')
 })
